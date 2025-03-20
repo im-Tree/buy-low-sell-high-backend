@@ -10,6 +10,8 @@ app = Flask(__name__)
 def compute_strategy(stock_symbol, strategy, short_window, long_window, stop_loss_pct):
     # 下载股票数据
     stock = yf.download(stock_symbol, start="2023-01-01", end="2024-01-01")
+    stock = stock.reset_index()  # 这样 'Date' 会变成普通列
+    stock.columns = stock.columns.droplevel(1)  # 删除第 1 层索引
 
     # 计算选定的技术指标
     if strategy == "SMA":
